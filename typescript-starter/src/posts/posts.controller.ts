@@ -15,8 +15,9 @@ import { UpdatePostDto } from './dto/updatePost.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Get()
-  getAllPosts() {
-    return this.postsService.getAllPosts();
+  async getAllPosts() {
+    const result = await this.postsService.getAllPosts();
+    return result;
   }
   @Get(':id')
   getPostById(@Param('id') id: string) {
@@ -27,8 +28,8 @@ export class PostsController {
     return this.postsService.createPost(post);
   }
   @Put(':id')
-  async replacePost(@Param('id') id: string, @Body() post: UpdatePostDto) {
-    return this.postsService.replacePost(Number(id), post);
+  async updatePost(@Param('id') id: string, @Body() post: UpdatePostDto) {
+    return this.postsService.updatePost(Number(id), post);
   }
 
   @Delete(':id')
