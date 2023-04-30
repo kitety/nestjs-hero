@@ -12,6 +12,7 @@ import { CreatePostDto } from './dto/createPost.dto';
 import { PostsService } from './posts.service';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
+import { FindOneParams } from '../utils/findOneParams';
 
 @Controller('posts')
 export class PostsController {
@@ -23,7 +24,10 @@ export class PostsController {
   }
 
   @Get(':id')
-  getPostById(@Param('id') id: string) {
+  // exception 3
+  // @UseFilters(ExceptionsLoggerFilter)
+  // getPostById(@Param('id') id: string) {
+  getPostById(@Param() { id }: FindOneParams) {
     return this.postsService.getPostById(Number(id));
   }
 

@@ -28,6 +28,13 @@ import { AuthenticationModule } from './authentication/authentication.module';
     AuthenticationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // exception 2
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: ExceptionsLoggerFilter,
+    // },
+  ],
 })
 export class AppModule {}
