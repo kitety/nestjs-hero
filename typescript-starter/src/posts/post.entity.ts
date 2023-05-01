@@ -32,7 +32,9 @@ class Post {
   @ManyToOne(() => User, (author: User) => author.posts, { eager: false })
   public author: User;
 
-  @ManyToMany(() => Category, (category) => category.posts)
+  @ManyToMany(() => Category, (category) => category.posts, {
+    cascade: true,
+  })
   @JoinTable()
   public categories: Category[];
 }
