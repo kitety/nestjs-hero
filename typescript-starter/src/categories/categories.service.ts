@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { Repository } from 'typeorm';
 import { CategoryNotFoundException } from './exceptions/categoryNotFound.exception';
+import { CreateCategoryDto } from './dto/createCategory.dto';
+import UpdateCategoryDto from './dto/updateCategory.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -15,20 +17,27 @@ export class CategoriesService {
     return this.categoriesRepository.find({ relations: ['posts'] });
   }
 
-  getCategoryById(id: number): Promise<Category> {
-    return this.categoriesRepository.findOne({
+  async getCategoryById(id: number): Promise<Category> {
+    const category = await this.categoriesRepository.findOne({
       where: { id },
       relations: ['posts'],
     });
+    if (category) {
+      return category;
+    }
+    throw new CategoryNotFoundException(id);
   }
 
-  async createCategory(category: Category): Promise<Category> {
+  async createCategory(category: CreateCategoryDto): Promise<Category> {
     const newCategory = await this.categoriesRepository.create(category);
     await this.categoriesRepository.save(newCategory);
     return newCategory;
   }
 
-  async updateCategory(id: number, category: Category): Promise<Category> {
+  async updateCategory(
+    id: number,
+    category: UpdateCategoryDto,
+  ): Promise<Category> {
     await this.categoriesRepository.update(id, category);
     const updatedCategory = await this.categoriesRepository.findOne({
       where: { id },
@@ -42,7 +51,9 @@ export class CategoriesService {
 
   async deleteCategory(id: number) {
     const deleteResponse = await this.categoriesRepository.delete(id);
-    if (!deleteResponse.affected) {
+    if (deleteResponse.affected) {
+      return deleteResponse;
+    } else {
       throw new CategoryNotFoundException(id);
     }
   }

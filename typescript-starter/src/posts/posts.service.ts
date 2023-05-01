@@ -15,7 +15,7 @@ export class PostsService {
   ) {}
 
   getAllPosts(): Promise<Post[]> {
-    return this.postsRepository.find({ relations: ['author'] });
+    return this.postsRepository.find({ relations: ['author', 'categories'] });
   }
 
   async getPostById(id: number): Promise<Post> {
