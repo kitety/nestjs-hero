@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -19,11 +20,6 @@ import RequestWithUser from '../authentication/requestWithUser.interface';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
-
-  @Get()
-  getAllPosts() {
-    return this.postsService.getAllPosts();
-  }
 
   @Get(':id')
   // exception 3
@@ -47,5 +43,14 @@ export class PostsController {
   @Delete(':id')
   async deletePost(@Param('id') id: string) {
     return this.postsService.deletePost(Number(id));
+  }
+
+  @Get()
+  async getPosts(@Query('search') search: string) {
+    console.log({ search });
+    if (search) {
+      return this.postsService.searchForPosts(search);
+    }
+    return this.postsService.getAllPosts();
   }
 }

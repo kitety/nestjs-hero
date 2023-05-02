@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import * as Joi from '@hapi/joi';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { CategoriesModule } from './categories/categories.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CategoriesModule } from './categories/categories.module';
     UsersModule,
     AuthenticationModule,
     CategoriesModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [
