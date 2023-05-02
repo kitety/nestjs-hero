@@ -20,8 +20,8 @@ class Post {
   @Column()
   public title: string;
 
-  @Column()
-  public content: string;
+  // @Column()
+  // public content: string;
 
   @Column({ nullable: true })
   @Transform(({ value }) => {
@@ -40,6 +40,9 @@ class Post {
   })
   @JoinTable()
   public categories: Category[];
+
+  @Column('text', { array: true })
+  public paragraphs: string[];
 }
 
 export default Post;

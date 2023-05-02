@@ -11,6 +11,30 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
+  // async deleteAvatar(userId: number) {
+  // const queryRunner = this.dataSource.createQueryRunner();
+  // const user = await this.getById(userId);
+  // const fileId = user.avatar?.id;
+  // if (fileId) {
+  //   await queryRunner.connect();
+  //   await queryRunner.startTransaction();
+  //
+  //   try {
+  //     await queryRunner.manager.update(User, userId, {
+  //       ...user,
+  //       avatar: null,
+  //     });
+  //     await this.filesService.deletePublicFile(fileId);
+  //     await queryRunner.commitTransaction();
+  //   } catch (error) {
+  //     await queryRunner.rollbackTransaction();
+  //     throw new InternalServerErrorException();
+  //   } finally {
+  //     await queryRunner.release();
+  //   }
+  // }
+  // }
+
   async getById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (user) {

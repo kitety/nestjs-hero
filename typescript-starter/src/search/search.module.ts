@@ -9,13 +9,6 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        console.log({
-          node: configService.get('ELASTICSEARCH_NODE'),
-          auth: {
-            username: configService.get('ELASTICSEARCH_USERNAME'),
-            password: configService.get('ELASTICSEARCH_PASSWORD'),
-          },
-        });
         return {
           node: configService.get('ELASTICSEARCH_NODE'),
           auth: {

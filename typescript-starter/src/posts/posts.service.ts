@@ -21,7 +21,6 @@ export class PostsService {
   }
 
   async getPostById(id: number): Promise<Post> {
-    console.log({ id }, typeof id);
     const post = await this.postsRepository.findOneBy({ id });
     if (post) {
       return post;
