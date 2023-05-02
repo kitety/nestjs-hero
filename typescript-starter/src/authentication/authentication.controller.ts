@@ -52,7 +52,7 @@ export class AuthenticationController {
   // @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthenticationGuard)
   @Post('log-out')
-  async lonOut(@Req() request: RequestWithUser) {
+  async logOut(@Req() request: RequestWithUser) {
     console.log({ '11': request.user });
     await this.userService.removeRefreshToken(request.user.id);
     request.res.setHeader(
