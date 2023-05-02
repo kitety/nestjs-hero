@@ -53,7 +53,6 @@ export class AuthenticationController {
   @UseGuards(JwtAuthenticationGuard)
   @Post('log-out')
   async logOut(@Req() request: RequestWithUser) {
-    console.log({ '11': request.user });
     await this.userService.removeRefreshToken(request.user.id);
     request.res.setHeader(
       'Set-Cookie',
