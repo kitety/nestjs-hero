@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { FindManyOptions, In, MoreThan, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/createPost.dto';
 import { UpdatePostDto } from './dto/updatePost.dto';
 import Post from './post.entity';
@@ -16,8 +16,26 @@ export class PostsService {
     private postSearchService: PostsSearchService,
   ) {}
 
-  getAllPosts(): Promise<Post[]> {
-    return this.postsRepository.find({ relations: ['author', 'categories'] });
+  async getAllPosts(offset?: number, limit?: number, startId?: number) {
+    const where: FindManyOptions<Post>['where'] = {};
+    let separateCount = 0;
+    if (startId) {
+      where.id = MoreThan(startId);
+      separateCount = await this.postsRepository.count({ where });
+    }
+    const [results, count] = await this.postsRepository.findAndCount({
+      where,
+      relations: ['author', 'categories'],
+      order: {
+        id: 'ASC',
+      },
+      skip: offset,
+      take: limit,
+    });
+    return {
+      results,
+      count: startId ? separateCount : count,
+    };
   }
 
   async getPostById(id: number): Promise<Post> {
@@ -56,17 +74,35 @@ export class PostsService {
     await this.postSearchService.remove(id);
   }
 
-  async searchForPosts(text: string) {
-    const results = await this.postSearchService.search(text);
+  async searchForPosts(
+    text: string,
+    offset?: number,
+    limit?: number,
+    startId?: number,
+  ) {
+    const { results, count } = await this.postSearchService.search(
+      text,
+      offset,
+      limit,
+      startId,
+    );
     const ids = results.map((result) => result.id);
     if (!ids.length) {
-      return [];
+      // 数据结构的完善
+      return {
+        results: [],
+        count: 0,
+      };
     }
-    return this.postsRepository.find({
+    const items = await this.postsRepository.find({
       where: {
         id: In(ids),
       },
       relations: ['author', 'categories'],
     });
+    return {
+      results: items,
+      count,
+    };
   }
 }
