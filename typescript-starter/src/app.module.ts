@@ -9,6 +9,7 @@ import * as Joi from '@hapi/joi';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { CategoriesModule } from './categories/categories.module';
 import { SearchModule } from './search/search.module';
+import { SubscribersModule } from './subscribers/subscribers.module';
 
 @Module({
   imports: [
@@ -27,6 +28,8 @@ import { SearchModule } from './search/search.module';
         JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        SUBSCRIBERS_SERVICE_HOST: Joi.string().required(),
+        SUBSCRIBERS_SERVICE_PORT: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -34,6 +37,7 @@ import { SearchModule } from './search/search.module';
     AuthenticationModule,
     CategoriesModule,
     SearchModule,
+    SubscribersModule,
   ],
   controllers: [AppController],
   providers: [
