@@ -14,7 +14,6 @@ import { SubscribersController } from './subscribers.controller';
         return ClientProxyFactory.create({
           transport: Transport.TCP,
           options: {
-            host: configService.get('SUBSCRIBERS_SERVICE_HOST'),
             port: configService.get('SUBSCRIBERS_SERVICE_PORT'),
           },
         });
