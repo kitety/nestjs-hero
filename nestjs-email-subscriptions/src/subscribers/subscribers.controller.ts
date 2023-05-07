@@ -1,29 +1,24 @@
 import { Controller } from '@nestjs/common';
 import { SubscribersService } from './subscribers.service';
-import {
-  Ctx,
-  MessagePattern,
-  Payload,
-  RmqContext,
-} from '@nestjs/microservices';
+import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
 import { CreateSubscriberDto } from './dto/createSubscriber.dto';
 
 @Controller('subscribers')
 export class SubscribersController {
   constructor(private readonly subscribersService: SubscribersService) {}
 
-  @MessagePattern({ cmd: 'add-subscriber' })
+  @EventPattern({ cmd: 'add-subscriber' })
   addSubscriber(subscriber: CreateSubscriberDto) {
     return this.subscribersService.addSubscriber(subscriber);
   }
 
-  @MessagePattern({ cmd: 'get-all-subscribers' })
+  @EventPattern({ cmd: 'get-all-subscribers' })
   getAllSubscribers() {
     return this.subscribersService.getAllSubscribers();
   }
 
   // mq
-  @MessagePattern({ cmd: '2add-subscriber' })
+  @EventPattern({ cmd: '2add-subscriber' })
   async addSubscriber2(
     @Payload() subscriber: CreateSubscriberDto,
     @Ctx() context: RmqContext,
@@ -45,7 +40,7 @@ export class SubscribersController {
     }, 1000);
   }
 
-  @MessagePattern({ cmd: '2get-all-subscribers' })
+  @EventPattern({ cmd: '2get-all-subscribers' })
   getAllSubscribers2() {
     console.log('2get-all-subscribers');
     return this.subscribersService.getAllSubscribers();

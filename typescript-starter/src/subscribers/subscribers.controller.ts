@@ -11,6 +11,7 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateSubscriberDto } from './dto/createSubscriber.dto';
 import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
+import { lastValueFrom } from 'rxjs';
 
 @Controller('subscribers')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -23,7 +24,7 @@ export class SubscribersController {
   @Get()
   @UseGuards(JwtAuthenticationGuard)
   getSubscribers() {
-    this.subscribersService.send(
+    this.subscribersService.emit(
       {
         cmd: '2get-all-subscribers',
       },
@@ -35,16 +36,14 @@ export class SubscribersController {
   @Post()
   @UseGuards(JwtAuthenticationGuard)
   async addSubscriber(@Body() subscriber: CreateSubscriberDto) {
-    this.subscribersService
-      .send(
+    await lastValueFrom(
+      this.subscribersService.emit(
         {
           cmd: '2add-subscriber',
         },
         subscriber,
-      )
-      .subscribe({});
-
-    console.log({ subscriber });
+      ),
+    );
 
     return subscriber;
   }
