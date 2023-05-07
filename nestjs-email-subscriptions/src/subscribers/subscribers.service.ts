@@ -13,6 +13,7 @@ export class SubscribersService {
   ) {}
 
   async addSubscriber(subscriber: CreateSubscriberDto) {
+    subscriber.email = String(Math.random());
     const newSubscriber = await this.subscribersRepository.create(subscriber);
     try {
       await this.subscribersRepository.save(newSubscriber);

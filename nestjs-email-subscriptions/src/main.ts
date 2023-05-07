@@ -7,16 +7,37 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  const user = configService.get('RABBITMQ_USER');
+  const password = configService.get('RABBITMQ_PASSWORD');
+  const host = configService.get('RABBITMQ_HOST');
+  const queueName = configService.get('RABBITMQ_QUEUE_NAME');
+
+  // p18
+  // await app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.TCP,
+  //   options: {
+  //     port: Number(configService.get('PORT')),
+  //   },
+  // });
+
+  //p19
   await app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      port: Number(configService.get('PORT')),
+      urls: [`amqp://${user}:${password}@${host}`],
+      queue: queueName,
+      noAck: false,
+      prefetchCount: 1,
+      queueOptions: {
+        durable: true,
+      },
     },
   });
+
   await app.startAllMicroservices().then(() => {
-    console.log(
-      `Microservice is listening on port ${configService.get('PORT')}...`,
-    );
+    // console.log(
+    //   `Microservice is listening on port ${configService.get('PORT')}...`,
+    // );
   });
 }
 

@@ -27,7 +27,7 @@ services:
       - postgres
 
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
     container_name: es01
     environment:
       - node.name=es01
@@ -45,6 +45,18 @@ services:
       - 9200:9200
     networks:
       - elastic
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes:
+      - /var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - ./rabbitmq.env
 
 
 volumes:

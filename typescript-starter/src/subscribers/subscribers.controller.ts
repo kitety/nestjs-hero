@@ -16,28 +16,59 @@ import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 @UseInterceptors(ClassSerializerInterceptor)
 export class SubscribersController {
   constructor(
-    @Inject('SUBSCRIBERS_SERVICE') private subscribersService: ClientProxy,
+    // @Inject('SUBSCRIBERS_SERVICE') private subscribersService: ClientProxy,
+    @Inject('SUBSCRIBERS_SERVICE_MQ') private subscribersService: ClientProxy,
   ) {}
 
   @Get()
   @UseGuards(JwtAuthenticationGuard)
-  async getSubscribers() {
-    return this.subscribersService.send(
+  getSubscribers() {
+    this.subscribersService.send(
       {
-        cmd: 'get-all-subscribers',
+        cmd: '2get-all-subscribers',
       },
       '',
     );
+    return 1;
   }
 
   @Post()
   @UseGuards(JwtAuthenticationGuard)
   async addSubscriber(@Body() subscriber: CreateSubscriberDto) {
-    return this.subscribersService.send(
-      {
-        cmd: 'add-subscriber',
-      },
-      subscriber,
-    );
+    this.subscribersService
+      .send(
+        {
+          cmd: '2add-subscriber',
+        },
+        subscriber,
+      )
+      .subscribe({});
+
+    console.log({ subscriber });
+
+    return subscriber;
   }
+
+  //microservice
+  // @Get()
+  // @UseGuards(JwtAuthenticationGuard)
+  // async getSubscribers() {
+  //   return this.subscribersService.send(
+  //     {
+  //       cmd: 'get-all-subscribers',
+  //     },
+  //     '',
+  //   );
+  // }
+  //
+  // @Post()
+  // @UseGuards(JwtAuthenticationGuard)
+  // async addSubscriber(@Body() subscriber: CreateSubscriberDto) {
+  //   return this.subscribersService.send(
+  //     {
+  //       cmd: 'add-subscriber',
+  //     },
+  //     subscriber,
+  //   );
+  // }
 }
