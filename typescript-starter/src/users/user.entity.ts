@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToMany,
@@ -9,6 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 import Address from './address.entity';
 import Post from '../posts/post.entity';
+import { Comment } from '../comments/comment.entity';
 
 @Entity()
 class User {
@@ -35,11 +37,17 @@ class User {
   @OneToMany(() => Post, (post) => post.author)
   public posts: Post[];
 
+  @OneToMany(() => Comment, (comment) => comment.author)
+  public comments: Comment[];
+
   @Column({
     nullable: true,
   })
   @Exclude()
   public currentHashedRefreshToken?: string;
+
+  @CreateDateColumn()
+  createdDate: Date;
 }
 
 export default User;

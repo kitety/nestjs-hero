@@ -823,6 +823,13 @@
     path-to-regexp "3.2.0"
     tslib "2.5.0"
 
+"@nestjs/cqrs@^9.0.3":
+  version "9.0.3"
+  resolved "https://registry.npmmirror.com/@nestjs/cqrs/-/cqrs-9.0.3.tgz#1ccd87feffebf33b2f3b0170f98eda8c6c74796f"
+  integrity sha512-hmbrqf51BVdgmnnxErnLVXfPNTEqr4Hz8DyLa9dKLIW3BuOyI5RDwJ/9sKbJ47UDBhumC5nQlNK9qk27mhqHfw==
+  dependencies:
+    uuid "9.0.0"
+
 "@nestjs/elasticsearch@7.1.0":
   version "7.1.0"
   resolved "https://registry.npmmirror.com/@nestjs/elasticsearch/-/elasticsearch-7.1.0.tgz#ba77a11d419b9aa542252a83b6490ef8c458fed4"

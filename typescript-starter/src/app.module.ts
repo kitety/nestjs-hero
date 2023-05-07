@@ -10,6 +10,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { CategoriesModule } from './categories/categories.module';
 import { SearchModule } from './search/search.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { SubscribersModule } from './subscribers/subscribers.module';
     CategoriesModule,
     SearchModule,
     SubscribersModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [

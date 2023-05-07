@@ -25,7 +25,7 @@ export class PostsService {
     }
     const [results, count] = await this.postsRepository.findAndCount({
       where,
-      relations: ['author', 'categories'],
+      relations: ['author', 'categories', 'comments'],
       order: {
         id: 'ASC',
       },
@@ -98,7 +98,7 @@ export class PostsService {
       where: {
         id: In(ids),
       },
-      relations: ['author', 'categories'],
+      relations: ['author', 'categories', 'comments'],
     });
     return {
       results: items,
