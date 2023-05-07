@@ -28,15 +28,20 @@ export class SubscribersController {
     // );
 
     setTimeout(() => {
+      const channel = context.getChannelRef();
+      const originalMsg = context.getMessage();
+      const isRetry = Math.random() > 0.5;
+      if (isRetry) {
+        channel.nack(originalMsg);
+      } else {
+        channel.ack(originalMsg);
+      }
       console.log(
         '2add-subscriber',
+        isRetry,
         new Date().toLocaleTimeString(),
         subscriber,
       );
-
-      const channel = context.getChannelRef();
-      const originalMsg = context.getMessage();
-      channel.ack(originalMsg);
     }, 1000);
   }
 
