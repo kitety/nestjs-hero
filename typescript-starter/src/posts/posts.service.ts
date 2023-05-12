@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, In, MoreThan, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/createPost.dto';
@@ -7,6 +7,9 @@ import Post from './post.entity';
 import { PostNotFundException } from './exception/postNotFund.exception';
 import User from '../users/user.entity';
 import PostsSearchService from './postsSearch.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { GET_POSTS_CACHE_KEY } from './postsCacheKey.constant';
 
 @Injectable()
 export class PostsService {
@@ -14,7 +17,17 @@ export class PostsService {
     @InjectRepository(Post)
     private postsRepository: Repository<Post>,
     private postSearchService: PostsSearchService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
+
+  async clearCache() {
+    const keys: string[] = await this.cacheManager.store.keys();
+    keys.forEach((key) => {
+      if (key.startsWith(GET_POSTS_CACHE_KEY)) {
+        this.cacheManager.del(key);
+      }
+    });
+  }
 
   async getAllPosts(offset?: number, limit?: number, startId?: number) {
     const where: FindManyOptions<Post>['where'] = {};
@@ -54,6 +67,7 @@ export class PostsService {
     });
     if (updatedPost) {
       await this.postSearchService.update(updatedPost);
+      await this.clearCache();
       return updatedPost;
     }
     throw new PostNotFundException(id);
@@ -63,6 +77,7 @@ export class PostsService {
     const newPost = await this.postsRepository.create({ ...post, author });
     await this.postsRepository.save(newPost);
     await this.postSearchService.indexPost(newPost);
+    await this.clearCache();
     return newPost;
   }
 
@@ -72,6 +87,7 @@ export class PostsService {
       throw new PostNotFundException(id);
     }
     await this.postSearchService.remove(id);
+    await this.clearCache();
   }
 
   async searchForPosts(
