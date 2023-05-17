@@ -28,5 +28,6 @@ const redisStore = require('cache-manager-redis-store').redisStore;
   ],
   controllers: [PostsController],
   providers: [PostsService, PostsSearchService],
+  exports: [PostsService],
 })
 export class PostsModule {}
