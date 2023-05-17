@@ -53,7 +53,7 @@ export default class PostsSearchService {
             should: {
               multi_match: {
                 query,
-                fields: ['title', 'paragraphs'],
+                fields: ['title', 'content'],
               },
             },
             filter: {
