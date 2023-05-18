@@ -15,6 +15,11 @@ export class AuthenticationService {
     private readonly configService: ConfigService,
   ) {}
 
+  public async getUserFromAuthenticationToken(token: string) {
+    const decodedToken = await this.jwtService.verifyAsync(token);
+    return await this.usersService.getById(decodedToken.id);
+  }
+
   public async register(registration: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registration.password, 10);
     try {
