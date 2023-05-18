@@ -11,9 +11,13 @@ import { CategoriesModule } from './categories/categories.module';
 import { SearchModule } from './search/search.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { CommentsModule } from './comments/comments.module';
+import { EmailModule } from './email/email.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EmailSchedulingModule } from './emailScheduling/emailScheduling.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     PostsModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
@@ -37,6 +41,9 @@ import { CommentsModule } from './comments/comments.module';
         RABBITMQ_QUEUE_NAME: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
+        EMAIL_SERVICE: Joi.string().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -46,6 +53,8 @@ import { CommentsModule } from './comments/comments.module';
     SearchModule,
     SubscribersModule,
     CommentsModule,
+    EmailModule,
+    EmailSchedulingModule,
   ],
   controllers: [AppController],
   providers: [

@@ -12,6 +12,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.use(cookieParser());
   await app.listen(3000);
+  console.log(111, process.env.EMAIL_PASSWORD1);
 }
 
 bootstrap();
