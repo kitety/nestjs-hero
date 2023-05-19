@@ -7,6 +7,7 @@ import PostsSearchService from './postsSearch.service';
 import { SearchModule } from '../search/search.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PostsResolver } from './posts.resolver';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const redisStore = require('cache-manager-redis-store').redisStore;
 
@@ -27,7 +28,7 @@ const redisStore = require('cache-manager-redis-store').redisStore;
     SearchModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, PostsSearchService],
+  providers: [PostsService, PostsSearchService, PostsResolver],
   exports: [PostsService],
 })
 export class PostsModule {}
