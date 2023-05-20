@@ -8,6 +8,8 @@ import { SearchModule } from '../search/search.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PostsResolver } from './posts.resolver';
+import { UsersModule } from '../users/users.module';
+import PostsLoaders from './loaders/posts.loaders';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const redisStore = require('cache-manager-redis-store').redisStore;
 
@@ -26,9 +28,10 @@ const redisStore = require('cache-manager-redis-store').redisStore;
     }),
     TypeOrmModule.forFeature([Post]),
     SearchModule,
+    UsersModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, PostsSearchService, PostsResolver],
+  providers: [PostsService, PostsSearchService, PostsResolver, PostsLoaders],
   exports: [PostsService],
 })
 export class PostsModule {}

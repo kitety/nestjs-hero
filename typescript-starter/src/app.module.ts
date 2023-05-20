@@ -18,13 +18,17 @@ import { ChatModule } from './chat/chat.module';
 import { join } from 'path';
 import * as process from 'process';
 import { GraphQLModule } from '@nestjs/graphql';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
     GraphQLModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      imports: [ConfigModule, UsersModule],
+      inject: [ConfigService, UsersService],
+      useFactory: (
+        configService: ConfigService,
+        usersService: UsersService,
+      ) => ({
         playground: Boolean(configService.get('GRAPHQL_PLAYGROUND')),
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       }),

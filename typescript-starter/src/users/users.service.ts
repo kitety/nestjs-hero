@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from './user.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -44,6 +44,10 @@ export class UsersService {
       `User with id ${id} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  async getByIds(ids: number[]): Promise<User[]> {
+    return this.usersRepository.find({ where: { id: In(ids) } });
   }
 
   async getUserRefreshTokenMatches(refreshToken: string, userId: number) {

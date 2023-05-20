@@ -29,7 +29,14 @@ export class PostsService {
     });
   }
 
-  async getAllPosts(offset?: number, limit?: number, startId?: number) {
+  async getAllPosts(
+    offset?: number,
+    limit?: number,
+    startId?: number,
+  ): Promise<{
+    results: Post[];
+    count: number;
+  }> {
     const where: FindManyOptions<Post>['where'] = {};
     let separateCount = 0;
     if (startId) {

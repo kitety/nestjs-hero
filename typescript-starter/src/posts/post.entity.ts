@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
 } from 'typeorm';
 import { Transform } from 'class-transformer';
 import User from '../users/user.entity';
@@ -49,6 +50,9 @@ class Post {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   public comments: Comment[];
+
+  @RelationId((post: Post) => post.author)
+  public authorId: number;
 
   @CreateDateColumn()
   createdDate: Date;
