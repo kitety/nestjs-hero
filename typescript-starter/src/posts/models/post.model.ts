@@ -17,4 +17,9 @@ export class Post {
 
   @Field(() => [String])
   paragraphs: string[];
+  @Field()
+  createdDate: Date;
+
+  @Field({ nullable: true })
+  scheduledDate?: Date;
 }

@@ -54,8 +54,14 @@ class Post {
   @RelationId((post: Post) => post.author)
   public authorId: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  scheduledDate?: Date;
 }
 
 export default Post;

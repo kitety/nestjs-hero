@@ -19,6 +19,7 @@ import { join } from 'path';
 import * as process from 'process';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSubModule } from './pubSub/pubSub.module';
+import { TimestampScalar } from './utils/scalars/timestamp.scalar';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import { PubSubModule } from './pubSub/pubSub.module';
         playground: Boolean(configService.get('GRAPHQL_PLAYGROUND')),
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         installSubscriptionHandlers: true,
+        buildSchemaOptions: {
+          dateScalarMode: 'timestamp',
+        },
       }),
     }),
     ScheduleModule.forRoot(),
@@ -76,6 +80,7 @@ import { PubSubModule } from './pubSub/pubSub.module';
   controllers: [AppController],
   providers: [
     AppService,
+    TimestampScalar,
     // exception 2
     // {
     //   provide: APP_FILTER,
