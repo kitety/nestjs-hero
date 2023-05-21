@@ -9,10 +9,10 @@ export class Post {
   @Field(() => Int)
   authorId: number;
 
-  @Field()
+  @Field(() => User)
   author: User;
 
-  @Field()
+  @Field(() => String)
   title: string;
 
   @Field(() => [String])
