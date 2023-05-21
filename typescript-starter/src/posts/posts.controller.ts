@@ -14,7 +14,6 @@ import {
 import { CreatePostDto } from './dto/createPost.dto';
 import { PostsService } from './posts.service';
 import { UpdatePostDto } from './dto/updatePost.dto';
-import JwtAuthenticationGuard from '../authentication/jwt-authentication.guard';
 import { FindOneParams } from '../utils/findOneParams';
 import RequestWithUser from '../authentication/requestWithUser.interface';
 import { PaginationParams } from '../utils/types/paginationParams';
@@ -22,6 +21,7 @@ import { DEFAULT_OFFSET, DEFAULT_PAGE_SIZE } from './constants';
 import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { GET_POSTS_CACHE_KEY } from './postsCacheKey.constant';
 import { HttpCacheInterceptor } from './httpCache.interceptor';
+import JwtTwoFactorGuard from '../authentication/jwt-two-factor.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -36,7 +36,7 @@ export class PostsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(JwtTwoFactorGuard)
   async createPost(@Body() post: CreatePostDto, @Req() req: RequestWithUser) {
     return this.postsService.createPost(post, req.user);
   }

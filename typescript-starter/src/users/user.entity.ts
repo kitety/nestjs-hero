@@ -48,6 +48,12 @@ class User {
 
   @CreateDateColumn()
   createdDate: Date;
+
+  @Column({ nullable: true })
+  public twoFactorAuthenticationSecret?: string;
+
+  @Column({ default: false })
+  public isTwoFactorAuthenticationEnabled: boolean;
 }
 
 export default User;

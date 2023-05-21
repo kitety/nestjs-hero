@@ -46,6 +46,11 @@ export class AuthenticationController {
       this.authenticationService.getCookieWithJwtRefreshToken(user.id);
     await this.userService.setCurrentRefreshToken(refreshToken, user.id);
     res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
+
+    // 两部验证开启就不忙返回user
+    if (user.isTwoFactorAuthenticationEnabled) {
+      return;
+    }
     return user;
   }
 
