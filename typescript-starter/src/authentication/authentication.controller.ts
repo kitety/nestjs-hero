@@ -17,9 +17,10 @@ import RequestWithUser from './requestWithUser.interface';
 import JwtAuthenticationGuard from './jwt-authentication.guard';
 import { UsersService } from '../users/users.service';
 import JwtRefreshGuard from './jwt-refresh.guard';
+import { EmailConfirmationService } from '../emailConfirmation/emailConfirmation.service';
 
 @Controller('authentication')
-@UseInterceptors(ClassSerializerInterceptor) // 活着全局
+@UseInterceptors(ClassSerializerInterceptor) // 或者全局
 // @SerializeOptions({
 //   strategy: 'excludeAll',
 // })
@@ -27,11 +28,16 @@ export class AuthenticationController {
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UsersService,
+    private readonly emailVerificationService: EmailConfirmationService,
   ) {}
 
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
-    return this.authenticationService.register(registrationData);
+    const user = await this.authenticationService.register(registrationData);
+    await this.emailVerificationService.sendVerificationLink(
+      registrationData.email,
+    );
+    return user;
   }
 
   @HttpCode(HttpStatus.OK)
