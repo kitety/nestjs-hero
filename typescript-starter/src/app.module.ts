@@ -20,9 +20,21 @@ import * as process from 'process';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSubModule } from './pubSub/pubSub.module';
 import { TimestampScalar } from './utils/scalars/timestamp.scalar';
+import { BullModule } from '@nestjs/bull';
+import { OptimizeModule } from './optimize/optimize.module';
 
 @Module({
   imports: [
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_HOST'),
+          port: Number(configService.get('REDIS_PORT')),
+        },
+      }),
+    }),
     GraphQLModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -77,6 +89,7 @@ import { TimestampScalar } from './utils/scalars/timestamp.scalar';
     EmailSchedulingModule,
     ChatModule,
     PubSubModule,
+    OptimizeModule,
   ],
   controllers: [AppController],
   providers: [
