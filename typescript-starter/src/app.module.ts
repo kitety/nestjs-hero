@@ -22,6 +22,7 @@ import { PubSubModule } from './pubSub/pubSub.module';
 import { TimestampScalar } from './utils/scalars/timestamp.scalar';
 import { BullModule } from '@nestjs/bull';
 import { OptimizeModule } from './optimize/optimize.module';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   imports: [
@@ -79,6 +80,9 @@ import { OptimizeModule } from './optimize/optimize.module';
         JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
         JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
+        TWILIO_ACCOUNT_SID: Joi.string().required(),
+        TWILIO_AUTH_TOKEN: Joi.string().required(),
+        TWILIO_VERIFICATION_SERVICE_SID: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -93,6 +97,7 @@ import { OptimizeModule } from './optimize/optimize.module';
     ChatModule,
     PubSubModule,
     OptimizeModule,
+    SmsModule,
   ],
   controllers: [AppController],
   providers: [

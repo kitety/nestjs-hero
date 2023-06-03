@@ -111,4 +111,10 @@ export class UsersService {
       },
     );
   }
+
+  async markPhoneNumberAsConfirmed(userId) {
+    return this.usersRepository.update(userId, {
+      isPhoneNumberConfirmed: true,
+    });
+  }
 }
